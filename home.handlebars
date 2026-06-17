@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-body shadow-sm">
+            <h3>Cadastrar Vídeo</h3>
+            <form action="/videos/novo" method="POST">
+                <div class="mb-3">
+                    <label>Título</label>
+                    <input type="text" name="titulo" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>Descrição</label>
+                    <textarea name="descricao" class="form-control" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label>URL</label>
+                    <input type="text" name="url" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Salvar Vídeo</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>Lista de Vídeos</h3>
+        <table class="table table-striped bg-white shadow-sm">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each videos}}
+                <tr>
+                    <td>{{this.titulo}}</td>
+                    <td>{{this.descricao}}</td>
+                    <td>
+                        <form action="/videos/deletar" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="{{this.id}}">
+                            <button type="submit" class="btn btn-danger btn-sm">Remover</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr>
+<div class="mt-4">
+    <h4>Rotas dos Exercícios (Ver Terminal)</h4>
+    <div class="list-group">
+        <a href="/exercicio4" class="list-group-item list-group-item-action">Exercício 4: Create e FindAll</a>
+        <a href="/exercicio5" class="list-group-item list-group-item-action">Exercício 5: FindByPk</a>
+        <a href="/exercicio6" class="list-group-item list-group-item-action">Exercício 6: Update (save)</a>
+        <a href="/exercicio7" class="list-group-item list-group-item-action">Exercício 7: Delete (destroy)</a>
+    </div>
+</div>
