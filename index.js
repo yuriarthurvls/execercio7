@@ -1,3 +1,4 @@
+
 const express = require('express');
 const { engine } = require('express-handlebars');
 const { Produto, Usuario, Video } = require('./models');
@@ -113,6 +114,172 @@ app.get('/exercicio7', async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+/*Exercício 8
+Crie uma rota GET /produtos que busque todos os produtos no banco e retorne um JSON com os resultados.*/
+
+app.get('/produtos', async (req, res) => {
+    try {
+        const produtos = await Produto.findAll();
+
+        res.json(produtos);
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message });
+    }
+});
+
+
+
+/*Exercício 9
+Crie uma rota POST /produtos que receba nome e preco pelo req.body e salve no banco usando create().*/
+app.post('/produtos', async (req, res) => {
+    try {
+        const { nome, preco } = req.body;
+
+        await Produto.create({
+            nome,
+            preco
+        });
+
+        res.json({
+            mensagem: 'Produto cadastrado com sucesso!'
+        });
+
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message });
+    }
+});
+
+
+
+
+
+
+
+/*Exercício 10
+Crie uma rota que receba um id como parâmetro de rota e delete o registro correspondente no banco.*/
+
+app.get('/produtos/deletar/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await Produto.destroy({
+            where: {
+                id
+            }
+        });
+
+        res.json({
+            mensagem: 'Produto removido com sucesso!'
+        });
+
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message });
+    }
+});
+
+
+
+
+/*Exercício 11
+Crie uma rota GET /usuarios que busque todos os usuários no banco e renderize uma view usuarios.handlebars com a lista usando ``.*/
+
+app.get('/usuarios', async (req, res) => {
+    try {
+        const usuarios = await Usuario.findAll({
+            raw: true
+        });
+
+        res.render('usuarios', {
+            usuarios
+        });
+
+    } catch (erro) {
+        res.send(erro);
+    }
+});
+
+
+
+/*Exercício 12
+Crie um formulário em cadastrarUsuario.handlebars com campos para nome, email e idade.
+
+A rota POST deve salvar o usuário no banco e redirecionar para /usuarios.*/
+
+app.get('/cadastrarUsuario', (req, res) => {
+    res.render('cadastrarUsuario');
+});
+
+app.post('/cadastrarUsuario', async (req, res) => {
+    try {
+        const { nome, email, idade } = req.body;
+
+        await Usuario.create({
+            nome,
+            email,
+            idade
+        });
+
+        res.redirect('/usuarios');
+
+    } catch (erro) {
+        res.send(erro);
+    }
+});
+
+
+
+
+/*Exercício 13
+Adicione um botão de remoção na listagem de usuários.
+
+Ao clicar, o usuário deve ser removido do banco e a página deve ser redirecionada para /usuarios.*/
+
+
+app.get('/usuarios/remover/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await Usuario.destroy({
+            where: {
+                id
+            }
+        });
+
+        res.redirect('/usuarios');
+
+    } catch (erro) {
+        res.send(erro);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
